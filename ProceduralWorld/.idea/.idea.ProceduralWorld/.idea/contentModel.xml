@@ -12,6 +12,7 @@
           <e p="Data" t="Include">
             <e p="NoiseData.cs" t="Include" />
             <e p="TerrainData.cs" t="Include" />
+            <e p="TextureData.cs" t="Include" />
             <e p="UpdatableData.cs" t="Include" />
           </e>
           <e p="Editor" t="Include">
@@ -28,6 +29,9 @@
           <e p="Utils" t="Include">
             <e p="HideOnPlay.cs" t="Include" />
           </e>
+        </e>
+        <e p="Shaders" t="Include">
+          <e p="Terrain.shader" t="Include" />
         </e>
         <e p="Standard Assets" t="Include">
           <e p="Characters" t="Include">

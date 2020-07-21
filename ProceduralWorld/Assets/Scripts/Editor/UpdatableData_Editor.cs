@@ -13,6 +13,8 @@ public class UpdatableData_Editor : Editor
 
     if (GUILayout.Button("Update")) {
         data.NotifyOfUpdatedValue();
+        EditorUtility.SetDirty(target);
+        GUIUtility.ExitGUI();
     }
   }
 }

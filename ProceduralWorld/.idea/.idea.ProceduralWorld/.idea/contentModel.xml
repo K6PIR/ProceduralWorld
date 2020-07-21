@@ -19,7 +19,6 @@
           <e p="Scripts" t="Include">
             <e p="CameraSwitch.cs" t="Include" />
             <e p="LevelReset.cs" t="Include" />
-            <e p="ParticleSceneControls.cs" t="Include" />
             <e p="PlaceTargetWithMouse.cs" t="Include" />
             <e p="SlowMoButton.cs" t="Include" />
           </e>

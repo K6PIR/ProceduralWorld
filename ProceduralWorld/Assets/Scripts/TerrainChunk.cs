@@ -27,7 +27,7 @@ public class TerrainChunk {
     private MeshSettings _meshSettings;
 
     private Transform _viewer;
-
+    
     public Vector2 viewerPosition {
         get { return new Vector2(_viewer.position.x, _viewer.position.z); }
     }
@@ -45,7 +45,7 @@ public class TerrainChunk {
         _sampleCentre = coord * meshSettings.meshWorldSize / meshSettings.meshScale;
         Vector2 position = coord * meshSettings.meshWorldSize;
         _bounds = new Bounds(_sampleCentre, Vector3.one * meshSettings.meshWorldSize);
-
+        
         _meshObject = new GameObject("TerrainChunk");
         _meshObject.transform.position = new Vector3(position.x, 0, position.y);
         _meshObject.transform.parent = parent;

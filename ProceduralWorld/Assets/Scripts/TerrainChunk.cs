@@ -13,18 +13,24 @@ public class TerrainChunk {
     private MeshRenderer _meshRenderer;
     private MeshFilter _meshFilter;
     private MeshCollider _meshCollider;
+    
+    private Forest _forest;
 
-    private LODInfo[] _detailLevels;
-    private LODMesh[] _lodMeshes;
-    private int _colliderLODIndex;
     private HeightMap _heightMap;
     private bool _heightMapReceived;
+    
+    private LODInfo[] _detailLevels;
+    private LODMesh[] _lodMeshes;
+    
+    private int _colliderLODIndex;
     private int _previousLODIndex = -1;
     private bool _hasSetCollider;
     private float _maxViewDistance;
 
     private HeightMapSettings _heightMapSettings;
     private MeshSettings _meshSettings;
+    private ForestSettings _forestSettings;
+    
 
     private Transform _viewer;
     
@@ -33,16 +39,18 @@ public class TerrainChunk {
     }
 
 
-    public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings,
+    public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, ForestSettings forestSettings,
         LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material) {
         this.coord = coord;
         _detailLevels = detailLevels;
         _colliderLODIndex = colliderLODIndex;
         _heightMapSettings = heightMapSettings;
         _meshSettings = meshSettings;
+        _forestSettings = forestSettings;
         _viewer = viewer;
 
         _sampleCentre = coord * meshSettings.meshWorldSize / meshSettings.meshScale;
+        Debug.Log("4  " + _sampleCentre);
         Vector2 position = coord * meshSettings.meshWorldSize;
         _bounds = new Bounds(_sampleCentre, Vector3.one * meshSettings.meshWorldSize);
         
@@ -70,7 +78,6 @@ public class TerrainChunk {
             }
         }
 
-       
     }
 
     public void Load() {
@@ -82,8 +89,8 @@ public class TerrainChunk {
     void OnHeightMapReceived(object heightMapObject) {
         _heightMap = (HeightMap) heightMapObject;
         _heightMapReceived = true;
-
         Update();
+        _forest = ForestGenerator.Generate(_forestSettings, _meshSettings, _sampleCentre, _heightMap, _meshObject.transform.parent);
     }
 
     public void Update() {

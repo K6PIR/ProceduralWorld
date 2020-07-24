@@ -30,6 +30,7 @@
         </e>
         <e p="Scripts" t="Include">
           <e p="Data" t="Include">
+            <e p="ForestSettings.cs" t="Include" />
             <e p="HeightMapSettings.cs" t="Include" />
             <e p="MeshSettings.cs" t="Include" />
             <e p="TextureData.cs" t="Include" />
@@ -40,6 +41,7 @@
             <e p="UpdatableData_Editor.cs" t="Include" />
           </e>
           <e p="FalloffGenerator.cs" t="Include" />
+          <e p="ForestGenerator.cs" t="Include" />
           <e p="HeightMapGenerator.cs" t="Include" />
           <e p="MapPreview.cs" t="Include" />
           <e p="MeshGenerator.cs" t="Include" />

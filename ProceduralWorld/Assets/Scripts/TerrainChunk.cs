@@ -39,7 +39,7 @@ public class TerrainChunk {
     }
 
 
-    public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, ForestSettings forestSettings,
+    public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, Forest forest, ForestSettings forestSettings,
         LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material) {
         this.coord = coord;
         _detailLevels = detailLevels;
@@ -48,9 +48,9 @@ public class TerrainChunk {
         _meshSettings = meshSettings;
         _forestSettings = forestSettings;
         _viewer = viewer;
+        _forest = forest;
 
         _sampleCentre = coord * meshSettings.meshWorldSize / meshSettings.meshScale;
-        Debug.Log("4  " + _sampleCentre);
         Vector2 position = coord * meshSettings.meshWorldSize;
         _bounds = new Bounds(_sampleCentre, Vector3.one * meshSettings.meshWorldSize);
         
@@ -90,7 +90,7 @@ public class TerrainChunk {
         _heightMap = (HeightMap) heightMapObject;
         _heightMapReceived = true;
         Update();
-        _forest = ForestGenerator.Generate(_forestSettings, _meshSettings, _sampleCentre, _heightMap, _meshObject.transform.parent);
+        ForestGenerator.AddTrees(_forest, _forestSettings, _meshSettings, _sampleCentre, _heightMap, _meshObject.transform.parent);
     }
 
     public void Update() {

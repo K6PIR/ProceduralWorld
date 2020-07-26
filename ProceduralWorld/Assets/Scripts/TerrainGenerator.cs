@@ -32,6 +32,8 @@ public class TerrainGenerator : MonoBehaviour {
     private float _meshWorldSize;
     private int _chunksVisibleInViewDistance;
 
+    private Forest _forest = new Forest();
+    
     private Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
     private List<TerrainChunk> visibleTerrainChunks = new List<TerrainChunk>();
     
@@ -97,7 +99,7 @@ public class TerrainGenerator : MonoBehaviour {
                 if (terrainChunkDictionary.ContainsKey(viewedChunkCoord)) {
                     terrainChunkDictionary[viewedChunkCoord].Update();
                 } else {
-                    TerrainChunk newTerrainChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, meshSettings, forestSettings, detailLevels,
+                    TerrainChunk newTerrainChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, meshSettings, _forest, forestSettings, detailLevels,
                         colliderLODIndex, transform, viewer, mapMaterial);
                     terrainChunkDictionary.Add(viewedChunkCoord, newTerrainChunk);
                     newTerrainChunk.onVisibilityChanged += OnTerrainChunkVisibilityChanged;

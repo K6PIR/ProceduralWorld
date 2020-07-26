@@ -15,11 +15,17 @@ MonoBehaviour:
   autoUpdate: 0
   forestElements:
   - name: BroadLeaf
-    yOffset: 0
+    minHeight: 45
+    maxHeight: 55
+    separation: 2
     prefab: {fileID: 100000, guid: c91c1eb85782d5748ace27eb4d7415bb, type: 3}
   - name: Conifer
-    yOffset: 0
+    minHeight: 65
+    maxHeight: 85
+    separation: 2
     prefab: {fileID: 100016, guid: 469edab27ab6d004d84af2c4a851bd7f, type: 3}
   - name: Palm
-    yOffset: 0
+    minHeight: 25
+    maxHeight: 35
+    separation: 2
     prefab: {fileID: 100004, guid: d027af1092f6b434090f040565e7e656, type: 3}

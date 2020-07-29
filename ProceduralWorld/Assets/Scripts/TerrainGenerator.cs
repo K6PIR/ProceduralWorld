@@ -50,6 +50,8 @@ public class TerrainGenerator : MonoBehaviour {
         _chunksVisibleInViewDistance = Mathf.RoundToInt(maxViewDistance / _meshWorldSize);
         
         UpdateVisibleChunks();
+
+        //SpawnViewer();
     }
 
     void Update() {
@@ -115,6 +117,15 @@ public class TerrainGenerator : MonoBehaviour {
         } else {
             visibleTerrainChunks.Remove(chunk);
         }
+    }
+
+    void SpawnViewer() {
+        Vector2Int viewerChunkCoord = new Vector2Int(
+            Mathf.RoundToInt(viewerPosition.x / _meshWorldSize),
+            Mathf.RoundToInt(viewerPosition.y / _meshWorldSize)
+            );
+
+        terrainChunkDictionary[viewerChunkCoord].SpawnViewer();
     }
 
     #endregion

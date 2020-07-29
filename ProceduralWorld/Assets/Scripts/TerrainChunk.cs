@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class TerrainChunk {
     public event System.Action<TerrainChunk, bool> onVisibilityChanged; 
@@ -30,9 +31,11 @@ public class TerrainChunk {
     private HeightMapSettings _heightMapSettings;
     private MeshSettings _meshSettings;
     private ForestSettings _forestSettings;
+    private List<Vector2> treeKeys = new List<Vector2>();
     
 
     private Transform _viewer;
+    private bool _hasToSpawnViewer = false;
     
     public Vector2 viewerPosition {
         get { return new Vector2(_viewer.position.x, _viewer.position.z); }
@@ -52,7 +55,7 @@ public class TerrainChunk {
 
         _sampleCentre = coord * meshSettings.meshWorldSize / meshSettings.meshScale;
         Vector2 position = coord * meshSettings.meshWorldSize;
-        _bounds = new Bounds(_sampleCentre, Vector3.one * meshSettings.meshWorldSize);
+        _bounds = new Bounds(position, Vector2.one * meshSettings.meshWorldSize);
         
         _meshObject = new GameObject("TerrainChunk");
         _meshObject.transform.position = new Vector3(position.x, 0, position.y);
@@ -65,8 +68,7 @@ public class TerrainChunk {
 
         _meshCollider = _meshObject.AddComponent<MeshCollider>();
 
-        _maxViewDistance = _detailLevels[detailLevels.Length - 1].visibleDstThreshold; 
-        
+         
         setVisible(false);
 
         _lodMeshes = new LODMesh[detailLevels.Length];
@@ -77,6 +79,8 @@ public class TerrainChunk {
                 _lodMeshes[i].updateCallback += UpdateCollisionMesh;
             }
         }
+        
+        _maxViewDistance = _detailLevels[detailLevels.Length - 1].visibleDstThreshold; 
 
     }
 
@@ -85,12 +89,17 @@ public class TerrainChunk {
             _meshSettings.numVertsPerLine,
             _heightMapSettings, _sampleCentre), OnHeightMapReceived);
     }
+
+    public void SpawnViewer() {
+        _hasToSpawnViewer = true;
+    }
     
     void OnHeightMapReceived(object heightMapObject) {
         _heightMap = (HeightMap) heightMapObject;
         _heightMapReceived = true;
         Update();
-        ForestGenerator.AddTrees(_forest, _forestSettings, _meshSettings, _sampleCentre, _heightMap, _meshObject.transform.parent);
+
+        treeKeys = ForestGenerator.AddTrees(_forest, _forestSettings, _meshSettings, _sampleCentre, _heightMap, _meshObject.transform.parent);
     }
 
     public void Update() {
@@ -111,6 +120,15 @@ public class TerrainChunk {
                     break;
                 }
             }
+            
+            if (_hasToSpawnViewer && _lodMeshes[0].hasMesh) {
+                _viewer.position = new Vector3(viewerPosition.x, 
+                    _lodMeshes[0].mesh.vertices[ Mathf.RoundToInt(viewerPosition.x + viewerPosition.x * _meshSettings.numVertsPerLine)].y + 15, 
+                    viewerPosition.y
+                    );
+                _hasToSpawnViewer = false;
+            }
+
 
             if (lodIndex != _previousLODIndex) {
                 LODMesh lodMesh = _lodMeshes[lodIndex];
@@ -154,6 +172,10 @@ public class TerrainChunk {
 
     public void setVisible(bool visible) {
         _meshObject.SetActive(visible);
+        
+        foreach (Vector2 treeKey in treeKeys) {
+            _forest.trees[treeKey].prefab.SetActive(visible);
+        }
     }
 
     public bool IsVisible() {

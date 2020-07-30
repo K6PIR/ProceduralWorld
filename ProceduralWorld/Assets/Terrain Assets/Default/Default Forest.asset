@@ -16,17 +16,17 @@ MonoBehaviour:
   forestElements:
   - name: BroadLeaf
     minHeight: 35
-    maxHeight: 65
-    separation: 1
+    maxHeight: 69
+    separation: 2
     yOffset: 0.5
-    perlinRatio: 0.604
-    densityRatio: 0.302
+    perlinRatio: 0.368
+    densityRatio: 0.1
     prefab: {fileID: 100000, guid: c91c1eb85782d5748ace27eb4d7415bb, type: 3}
     noiseSettings:
       normalizeMode: 0
       scale: 50
-      octaves: 2
-      persistence: 0.6
+      octaves: 1
+      persistence: 0.406
       lacunarity: 2
       seed: 0
       offset: {x: 0, y: 0}
@@ -35,8 +35,8 @@ MonoBehaviour:
     maxHeight: 110
     separation: 1
     yOffset: 1
-    perlinRatio: 0.558
-    densityRatio: 0.307
+    perlinRatio: 0.394
+    densityRatio: 0.1
     prefab: {fileID: 100016, guid: 469edab27ab6d004d84af2c4a851bd7f, type: 3}
     noiseSettings:
       normalizeMode: 0
@@ -51,8 +51,8 @@ MonoBehaviour:
     maxHeight: 35
     separation: 4
     yOffset: 0.5
-    perlinRatio: 0
-    densityRatio: 0
+    perlinRatio: 0.43
+    densityRatio: 0.049
     prefab: {fileID: 100004, guid: d027af1092f6b434090f040565e7e656, type: 3}
     noiseSettings:
       normalizeMode: 0

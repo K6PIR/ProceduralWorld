@@ -9,13 +9,10 @@ public class TextureData : UpdatableData {
     private const TextureFormat textureFormat = TextureFormat.RGB565;
     
     public Layer[] layers;
-    
-    
+
     private float _savedMinHeight;
     private float _savedMaxHeight;
-    
-    
-    
+
     public void ApplyToMaterial(Material material) {
         
         material.SetInt("layerCount", layers.Length);

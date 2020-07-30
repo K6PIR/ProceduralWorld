@@ -28,8 +28,6 @@ public static class TextureGenerator
                 colorMap[y * width + x] = Color.Lerp(Color.black, Color.white, Mathf.InverseLerp(heightMap.minValue, heightMap.maxValue, heightMap.values[x, y]));
             }
         }
-
-        
         return TextureFromColorMap(colorMap, width, height);
     }
 }

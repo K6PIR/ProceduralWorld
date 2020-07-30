@@ -26,7 +26,7 @@ public class TerrainGenerator : MonoBehaviour {
     private const float MoveThresholdForChunkUpdate = 25f;
     private const float SqrMoveThresholdForChunkUpdate = MoveThresholdForChunkUpdate * MoveThresholdForChunkUpdate;
 
-    private Vector2 viewerPosition;
+    private Vector2 _viewerPosition;
     private Vector2 _viewerPositionOld;
     
     private float _meshWorldSize;
@@ -34,8 +34,8 @@ public class TerrainGenerator : MonoBehaviour {
 
     private Forest _forest = new Forest();
     
-    private Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
-    private List<TerrainChunk> visibleTerrainChunks = new List<TerrainChunk>();
+    private Dictionary<Vector2, TerrainChunk> _terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
+    private List<TerrainChunk> _visibleTerrainChunks = new List<TerrainChunk>();
     
     #endregion
 
@@ -55,27 +55,26 @@ public class TerrainGenerator : MonoBehaviour {
     }
 
     void Update() {
-        viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
+        _viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
 
-        if (viewerPosition != _viewerPositionOld) {
-            foreach (TerrainChunk chunk in visibleTerrainChunks) {
+        if (_viewerPosition != _viewerPositionOld) {
+            foreach (TerrainChunk chunk in _visibleTerrainChunks) {
                 chunk.UpdateCollisionMesh();
             }
         }
 
-        if ((_viewerPositionOld - viewerPosition).sqrMagnitude > SqrMoveThresholdForChunkUpdate) {
-            _viewerPositionOld = viewerPosition;
+        if ((_viewerPositionOld - _viewerPosition).sqrMagnitude > SqrMoveThresholdForChunkUpdate) {
+            _viewerPositionOld = _viewerPosition;
             UpdateVisibleChunks();
         }
     }
     
     #endregion
-
     
     #region Public Methods
 
     public List<TerrainChunk> GetVisibleTerrainChunks() {
-        return visibleTerrainChunks;
+        return _visibleTerrainChunks;
     }
     
     #endregion
@@ -84,13 +83,13 @@ public class TerrainGenerator : MonoBehaviour {
     
     void UpdateVisibleChunks() {
         HashSet<Vector2> alreadyUpdatedChunkCoords = new HashSet<Vector2>();
-        for (int i = visibleTerrainChunks.Count-1;  i >= 0 ; i--) {
-            alreadyUpdatedChunkCoords.Add(visibleTerrainChunks[i].coord);
-            visibleTerrainChunks[i].Update();
+        for (int i = _visibleTerrainChunks.Count-1;  i >= 0 ; i--) {
+            alreadyUpdatedChunkCoords.Add(_visibleTerrainChunks[i].coord);
+            _visibleTerrainChunks[i].Update();
         }
 
-        int currentChunkCoordX = Mathf.RoundToInt(viewerPosition.x / _meshWorldSize);
-        int currentChunkCoordY = Mathf.RoundToInt(viewerPosition.y / _meshWorldSize);
+        int currentChunkCoordX = Mathf.RoundToInt(_viewerPosition.x / _meshWorldSize);
+        int currentChunkCoordY = Mathf.RoundToInt(_viewerPosition.y / _meshWorldSize);
         
         for (int yOffset = -_chunksVisibleInViewDistance; yOffset <= _chunksVisibleInViewDistance; yOffset++) {
             for (int xOffset = -_chunksVisibleInViewDistance; xOffset <= _chunksVisibleInViewDistance; xOffset++) {
@@ -98,12 +97,12 @@ public class TerrainGenerator : MonoBehaviour {
 
                 if (alreadyUpdatedChunkCoords.Contains(viewedChunkCoord)) continue;
                 
-                if (terrainChunkDictionary.ContainsKey(viewedChunkCoord)) {
-                    terrainChunkDictionary[viewedChunkCoord].Update();
+                if (_terrainChunkDictionary.ContainsKey(viewedChunkCoord)) {
+                    _terrainChunkDictionary[viewedChunkCoord].Update();
                 } else {
                     TerrainChunk newTerrainChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, meshSettings, _forest, forestSettings, detailLevels,
                         colliderLODIndex, transform, viewer, mapMaterial);
-                    terrainChunkDictionary.Add(viewedChunkCoord, newTerrainChunk);
+                    _terrainChunkDictionary.Add(viewedChunkCoord, newTerrainChunk);
                     newTerrainChunk.onVisibilityChanged += OnTerrainChunkVisibilityChanged;
                     newTerrainChunk.Load();
                 }
@@ -113,19 +112,19 @@ public class TerrainGenerator : MonoBehaviour {
 
     void OnTerrainChunkVisibilityChanged(TerrainChunk chunk, bool isVisible) {
         if (isVisible) {
-            visibleTerrainChunks.Add(chunk);
+            _visibleTerrainChunks.Add(chunk);
         } else {
-            visibleTerrainChunks.Remove(chunk);
+            _visibleTerrainChunks.Remove(chunk);
         }
     }
 
     void SpawnViewer() {
         Vector2Int viewerChunkCoord = new Vector2Int(
-            Mathf.RoundToInt(viewerPosition.x / _meshWorldSize),
-            Mathf.RoundToInt(viewerPosition.y / _meshWorldSize)
+            Mathf.RoundToInt(_viewerPosition.x / _meshWorldSize),
+            Mathf.RoundToInt(_viewerPosition.y / _meshWorldSize)
             );
 
-        terrainChunkDictionary[viewerChunkCoord].SpawnViewer();
+        _terrainChunkDictionary[viewerChunkCoord].SpawnViewer();
     }
 
     #endregion

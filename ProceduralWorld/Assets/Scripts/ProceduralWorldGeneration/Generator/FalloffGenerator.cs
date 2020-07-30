@@ -16,7 +16,6 @@ public static class FalloffGenerator
                 map[i, j] = Evaluate(value);
             }
         }
-
         return map;
     }
 

@@ -95,6 +95,9 @@ public static class MeshGenerator {
 }
 
 public class MeshData {
+	
+	#region Private Variables
+	
     private Vector3[] _vertices;
     private int[] _triangles;
     private Vector2[] _uvs;
@@ -105,8 +108,12 @@ public class MeshData {
     private int _outOfMeshTriangleIndex;
 
     private int _triangleIndex;
-
+    
     private bool _useFlatShading;
+    
+    #endregion
+    
+    #region Public Methods
     
     public MeshData(int numVertsPerLine, int skipIncrement, bool useFlatShading) {
 	    _useFlatShading = useFlatShading;
@@ -150,7 +157,31 @@ public class MeshData {
 	    }
     }
 
-    Vector3[] CalculateNormals() {
+    public Mesh CreateMesh() {
+	    Mesh mesh = new Mesh();
+	    mesh.vertices = _vertices;
+	    mesh.triangles = _triangles;
+	    mesh.uv = _uvs;
+        
+	    if (_useFlatShading) mesh.RecalculateNormals();
+	    else mesh.normals = _bakedNormals;
+
+	    return mesh;
+    }
+    
+    public void ProcessMesh() {
+	    if (_useFlatShading) {
+		    FlatShading();
+	    } else {
+		    BakeNormals();
+	    }
+    }
+    
+    #endregion
+    
+    #region Private Methods
+    
+    private Vector3[] CalculateNormals() {
         Vector3[] vertexNormals = new Vector3[_vertices.Length];
         int triangleCount = _triangles.Length / 3;
 
@@ -188,7 +219,7 @@ public class MeshData {
         return vertexNormals;
     }
 
-    Vector3 SurfaceNormalFromIndices(int indexA, int indexB, int indexC) {
+    private Vector3 SurfaceNormalFromIndices(int indexA, int indexB, int indexC) {
         Vector3 pointA = (indexA < 0) ? _outOfMeshVertices[-indexA - 1] : _vertices[indexA];
         Vector3 pointB = (indexB < 0) ? _outOfMeshVertices[-indexB - 1] : _vertices[indexB];
         Vector3 pointC = (indexC < 0) ? _outOfMeshVertices[-indexC - 1] : _vertices[indexC];
@@ -198,20 +229,8 @@ public class MeshData {
 
         return Vector3.Cross(ABVector, ACVector).normalized;
     }
-
-    public void BakeNormals() {
-	    _bakedNormals = CalculateNormals();
-    }
-
-    public void ProcessMesh() {
-	    if (_useFlatShading) {
-		    FlatShading();
-	    } else {
-		    BakeNormals();
-	    }
-    }
     
-    void FlatShading() {
+    private void FlatShading() {
 	    Vector3[] flatShadedVertices = new Vector3[_triangles.Length];
 	    Vector2[] flatShadedUVs = new Vector2[_triangles.Length];
 
@@ -224,16 +243,10 @@ public class MeshData {
 	    _vertices = flatShadedVertices;
 	    _uvs = flatShadedUVs;
     }
-    
-    public Mesh CreateMesh() {
-        Mesh mesh = new Mesh();
-        mesh.vertices = _vertices;
-        mesh.triangles = _triangles;
-        mesh.uv = _uvs;
-        
-        if (_useFlatShading) mesh.RecalculateNormals();
-        else mesh.normals = _bakedNormals;
 
-        return mesh;
+    private void BakeNormals() {
+	    _bakedNormals = CalculateNormals();
     }
+    
+    #endregion
 }

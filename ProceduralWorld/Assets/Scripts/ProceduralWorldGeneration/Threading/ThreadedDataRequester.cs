@@ -5,6 +5,7 @@ using UnityEngine;
  using System.Threading;
 
 public class ThreadedDataRequester : MonoBehaviour {
+    
     static ThreadedDataRequester instance;
     
     Queue<ThreadInfo> _dataQueue = new Queue<ThreadInfo>();

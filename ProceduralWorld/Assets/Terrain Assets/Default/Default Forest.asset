@@ -15,23 +15,50 @@ MonoBehaviour:
   autoUpdate: 0
   forestElements:
   - name: BroadLeaf
-    minHeight: 40
-    maxHeight: 60
+    minHeight: 35
+    maxHeight: 65
     separation: 1
     yOffset: 0.5
-    ratio: 0.094
+    perlinRatio: 0.604
+    densityRatio: 0.302
     prefab: {fileID: 100000, guid: c91c1eb85782d5748ace27eb4d7415bb, type: 3}
+    noiseSettings:
+      normalizeMode: 0
+      scale: 50
+      octaves: 2
+      persistence: 0.6
+      lacunarity: 2
+      seed: 0
+      offset: {x: 0, y: 0}
   - name: Conifer
-    minHeight: 60
-    maxHeight: 85
+    minHeight: 70
+    maxHeight: 110
     separation: 1
     yOffset: 1
-    ratio: 0.103
+    perlinRatio: 0.558
+    densityRatio: 0.307
     prefab: {fileID: 100016, guid: 469edab27ab6d004d84af2c4a851bd7f, type: 3}
+    noiseSettings:
+      normalizeMode: 0
+      scale: 50
+      octaves: 2
+      persistence: 0.385
+      lacunarity: 2
+      seed: 1
+      offset: {x: 0, y: 0}
   - name: Palm
     minHeight: 25
     maxHeight: 35
     separation: 4
     yOffset: 0.5
-    ratio: 0.098
+    perlinRatio: 0
+    densityRatio: 0
     prefab: {fileID: 100004, guid: d027af1092f6b434090f040565e7e656, type: 3}
+    noiseSettings:
+      normalizeMode: 0
+      scale: 50
+      octaves: 2
+      persistence: 0.344
+      lacunarity: 0
+      seed: 2
+      offset: {x: 0, y: 0}

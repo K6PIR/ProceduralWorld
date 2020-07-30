@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class TerrainChunk {
@@ -31,7 +33,7 @@ public class TerrainChunk {
     private HeightMapSettings _heightMapSettings;
     private MeshSettings _meshSettings;
     private ForestSettings _forestSettings;
-    private List<Vector2> treeKeys = new List<Vector2>();
+    private List<Vector2> _treeKeys = new List<Vector2>();
     
 
     private Transform _viewer;
@@ -80,7 +82,7 @@ public class TerrainChunk {
             }
         }
         
-        _maxViewDistance = _detailLevels[detailLevels.Length - 1].visibleDstThreshold; 
+        _maxViewDistance = _detailLevels[detailLevels.Length - 1].visibleDstThreshold;
 
     }
 
@@ -99,7 +101,7 @@ public class TerrainChunk {
         _heightMapReceived = true;
         Update();
 
-        treeKeys = ForestGenerator.AddTrees(_forest, _forestSettings, _meshSettings, _sampleCentre, _heightMap, _meshObject.transform.parent);
+        _treeKeys = ForestGenerator.AddTrees(_forest, _forestSettings, _meshSettings, _sampleCentre, _heightMap, _meshObject.transform.parent);
     }
 
     public void Update() {
@@ -173,8 +175,8 @@ public class TerrainChunk {
     public void setVisible(bool visible) {
         _meshObject.SetActive(visible);
         
-        foreach (Vector2 treeKey in treeKeys) {
-            _forest.trees[treeKey].prefab.SetActive(visible);
+        foreach (Vector2 treeKey in _treeKeys) {
+            _forest.trees[treeKey].element.SetActive(visible);
         }
     }
 

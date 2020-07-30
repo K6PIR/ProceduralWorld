@@ -4,9 +4,8 @@ using UnityEngine;
 
 [CreateAssetMenu()]
 public class ForestSettings : UpdatableData {
-    public ForestElement[] forestElements;
-
-
+    public ForestElementSettings[] forestElements;
+    
 #if UNITY_EDITOR
     protected override void OnValidate() {
         base.OnValidate();
@@ -18,9 +17,8 @@ public class ForestSettings : UpdatableData {
 #endif
 }
 
-
 [System.Serializable]
-public class ForestElement {
+public class ForestElementSettings {
     public string name;
     public float minHeight;
     public float maxHeight;
@@ -28,10 +26,16 @@ public class ForestElement {
     public float yOffset;
 
     [Range(0, 1)]
-    public float ratio;
+    public float perlinRatio;
+
+    [Range(0, 1)]
+    public float densityRatio;
     
     public GameObject prefab;
 
+    public NoiseSettings noiseSettings;
+    
+    
     public void OnValidate() {
         if (minHeight >= maxHeight) maxHeight = minHeight + 0.01f;
     }

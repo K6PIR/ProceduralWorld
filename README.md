@@ -5,5 +5,5 @@ With this project I could work on procedural generation and on multi-threading p
 
 ## Usage
 
-Open the folder Mining Battle inside the repository with UNITY to use it.
+Open the folder ProceduralWorld inside the repository with UNITY to use it.
 If you want to play, just build a version with UNITY.
